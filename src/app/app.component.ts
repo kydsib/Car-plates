@@ -9,18 +9,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'car-numbers';
-  // storedCarPlates: CarPlate[] = [];
-
-  // recieving data from app-input component
-  // onCarPlateAdded(carplateData: {
-  //   name: string;
-  //   surname: string;
-  //   plateData: string;
-  // }) {
-  //   this.storedCarPlates.push({
-  //     name: carplateData.name,
-  //     surname: carplateData.surname,
-  //     plateData: carplateData.plateData
-  //   });
-  // }
 }

@@ -1,5 +1,5 @@
 export interface CarPlate {
-  id: string;
+  _id: string;
   name: string;
   surname: string;
   plateData: string;
