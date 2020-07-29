@@ -1,0 +1,9 @@
+<div *ngIf="carPlates.length > 0; else noData" class="row">
+
+    <div class="row">
+        <app-car-plate-item *ngFor="let carPlateEl of carPlates" [carPlate]="carPlateEl"></app-car-plate-item>
+    </div>
+</div>
+<ng-template #noData>
+    <p>No Car Plates added</p>
+</ng-template>

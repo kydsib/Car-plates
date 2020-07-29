@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-xs-12">
+        <!--  acces to angular form obj -- #carPlateForm="ngForm" -->
+        <form #carplateform="ngForm" (submit)="onAddCarPlate(carplateform)" class="needs-validation" novalidate>
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label for="validationCustom01">Name</label>
+                    <input #fname="ngModel" [class.is-invalid]="fname.invalid && fname.touched" [class.is-valid]="fname.valid" class="form-control" id="validationCustom01" name="fname" ngModel placeholder="Enter Name" required type="text"/>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="surname">Surname</label>
+                    <input #surname="ngModel" [class.is-invalid]="surname.invalid && surname.touched" [class.is-valid]="surname.valid" class="form-control" id="surname" name="surname" ngModel placeholder="Enter Surname" required type="text"/>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="plate">Plate Number</label>
+                    <input #carplate="ngModel" [class.is-invalid]="carplate.invalid && carplate.touched" [class.is-valid]="carplate.valid" class="form-control" id="plate" name="plate" ngModel placeholder="Car Plate" required type="text"/>
+                    <div class="invalid-feedback">
+                        Please enter valid plate number.
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <button class="btn btn-success" type="submit">
+                    Add
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
