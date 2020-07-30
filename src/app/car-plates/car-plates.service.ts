@@ -31,7 +31,12 @@ export class CarPlateService {
   }
 
   getPlate(id: string) {
-    return { ...this.carPlates.find(plate => plate._id === id) };
+    return this.http.get<{
+      _id: string;
+      name: string;
+      surname: string;
+      plateData: string;
+    }>('http://localhost:3000/api/plates/' + id);
   }
 
   addCarPlate(name: string, surname: string, plateData: string) {
@@ -62,12 +67,7 @@ export class CarPlateService {
     surname: string,
     plateData: string
   ) {
-    const plate: CarPlate = {
-      _id: _id,
-      name: name,
-      surname: surname,
-      plateData: plateData
-    };
+    const plate: CarPlate = { _id, name, surname, plateData };
     this.http
       .put('http://localhost:3000/api/plates/' + _id, plate)
       .subscribe(response => {

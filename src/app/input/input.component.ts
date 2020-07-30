@@ -11,9 +11,9 @@ import { CarPlate } from '../car-plates/car-plates.model';
   styleUrls: ['./input.component.scss']
 })
 export class InputComponent implements OnInit {
-  plate: CarPlate;
+  carPlate: CarPlate;
   private mode = 'create';
-  private carPlateId: string;
+  private plateId: string;
 
   constructor(
     public platesService: CarPlateService,
@@ -21,44 +21,30 @@ export class InputComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log(this.plate);
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('carPlateId')) {
         this.mode = 'edit';
-        this.carPlateId = paramMap.get('carPlateId');
-        console.log(this.carPlateId);
-        this.plate = this.platesService.getPlate(this.carPlateId);
+        this.plateId = paramMap.get('carPlateId');
+
+        this.platesService.getPlate(this.plateId).subscribe(carPlateData => {
+          this.carPlate = {
+            _id: carPlateData._id,
+            name: carPlateData.name,
+            surname: carPlateData.surname,
+            plateData: carPlateData.plateData
+          };
+        });
       } else {
         this.mode = 'create';
-        this.carPlateId = null;
+        this.plateId = null;
       }
     });
   }
-
-  // onAddCarPlate(form: NgForm) {
-  //   if (form.invalid) {
-  //     return;
-  //   }
-
-  //   this.platesService.addCarPlate(
-  //     form.value.fname,
-  //     form.value.surname,
-  //     form.value.plate
-  //   );
-
-  //   form.resetForm();
-  // }
 
   onSaveCarPlate(form: NgForm) {
     if (form.invalid) {
       return;
     }
-
-    this.platesService.addCarPlate(
-      form.value.fname,
-      form.value.surname,
-      form.value.plate
-    );
 
     if (this.mode === 'create') {
       this.platesService.addCarPlate(
@@ -68,7 +54,7 @@ export class InputComponent implements OnInit {
       );
     } else {
       this.platesService.updateCarPlate(
-        this.carPlateId,
+        this.plateId,
         form.value.fname,
         form.value.surname,
         form.value.plate
