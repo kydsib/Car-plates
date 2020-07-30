@@ -47,6 +47,7 @@ export class CarPlateService {
         carPlate
       )
       .subscribe(responseData => {
+        console.log(carPlate);
         const id = responseData.carPlateId;
         carPlate._id = id;
         this.carPlates.push(carPlate);

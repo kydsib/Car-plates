@@ -39,20 +39,26 @@ export class InputComponent implements OnInit {
       return;
     }
 
-    if (this.mode === 'create') {
-      this.platesService.addCarPlate(
-        form.value.fname,
-        form.value.surname,
-        form.value.plate
-      );
-    } else {
-      this.platesService.updateCarPlate(
-        this.carPlateId,
-        form.value.fname,
-        form.value.surname,
-        form.value.plate
-      );
-    }
+    this.platesService.addCarPlate(
+      form.value.fname,
+      form.value.surname,
+      form.value.plate
+    );
+
+    // if (this.mode === 'create') {
+    //   this.platesService.addCarPlate(
+    //     form.value.fname,
+    //     form.value.surname,
+    //     form.value.plate
+    //   );
+    // } else {
+    //   this.platesService.updateCarPlate(
+    //     this.carPlateId,
+    //     form.value.fname,
+    //     form.value.surname,
+    //     form.value.plate
+    //   );
+    // }
 
     form.resetForm();
   }
