@@ -26,6 +26,7 @@ export class InputComponent implements OnInit {
       if (paramMap.has('carPlateId')) {
         this.mode = 'edit';
         this.carPlateId = paramMap.get('carPlateId');
+        console.log(this.carPlateId);
         this.plate = this.platesService.getPlate(this.carPlateId);
       } else {
         this.mode = 'create';
@@ -33,6 +34,20 @@ export class InputComponent implements OnInit {
       }
     });
   }
+
+  // onAddCarPlate(form: NgForm) {
+  //   if (form.invalid) {
+  //     return;
+  //   }
+
+  //   this.platesService.addCarPlate(
+  //     form.value.fname,
+  //     form.value.surname,
+  //     form.value.plate
+  //   );
+
+  //   form.resetForm();
+  // }
 
   onSaveCarPlate(form: NgForm) {
     if (form.invalid) {
@@ -45,20 +60,20 @@ export class InputComponent implements OnInit {
       form.value.plate
     );
 
-    // if (this.mode === 'create') {
-    //   this.platesService.addCarPlate(
-    //     form.value.fname,
-    //     form.value.surname,
-    //     form.value.plate
-    //   );
-    // } else {
-    //   this.platesService.updateCarPlate(
-    //     this.carPlateId,
-    //     form.value.fname,
-    //     form.value.surname,
-    //     form.value.plate
-    //   );
-    // }
+    if (this.mode === 'create') {
+      this.platesService.addCarPlate(
+        form.value.fname,
+        form.value.surname,
+        form.value.plate
+      );
+    } else {
+      this.platesService.updateCarPlate(
+        this.carPlateId,
+        form.value.fname,
+        form.value.surname,
+        form.value.plate
+      );
+    }
 
     form.resetForm();
   }

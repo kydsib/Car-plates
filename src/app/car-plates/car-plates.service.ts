@@ -62,7 +62,12 @@ export class CarPlateService {
     surname: string,
     plateData: string
   ) {
-    const plate: CarPlate = { _id, name, surname, plateData };
+    const plate: CarPlate = {
+      _id: _id,
+      name: name,
+      surname: surname,
+      plateData: plateData
+    };
     this.http
       .put('http://localhost:3000/api/plates/' + _id, plate)
       .subscribe(response => {
