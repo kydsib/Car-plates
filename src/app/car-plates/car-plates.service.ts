@@ -30,6 +30,15 @@ export class CarPlateService {
     return this.carPlatesUpdated.asObservable();
   }
 
+  getPlate(id: string) {
+    return this.http.get<{
+      _id: string;
+      name: string;
+      surname: string;
+      plateData: string;
+    }>('http://localhost:3000/api/plates/' + id);
+  }
+
   addCarPlate(name: string, surname: string, plateData: string) {
     const carPlate: CarPlate = {
       _id: null,
@@ -47,6 +56,24 @@ export class CarPlateService {
         carPlate._id = id;
         this.carPlates.push(carPlate);
         // Using Subject to emit data
+        this.carPlatesUpdated.next([...this.carPlates]);
+      });
+  }
+
+  updateCarPlate(
+    _id: string,
+    name: string,
+    surname: string,
+    plateData: string
+  ) {
+    const plate: CarPlate = { _id, name, surname, plateData };
+    this.http
+      .put('http://localhost:3000/api/plates/' + _id, plate)
+      .subscribe(response => {
+        const updatedPlaes = [...this.carPlates];
+        const oldPlateIndex = updatedPlaes.findIndex(e => e._id === plate._id);
+        updatedPlaes[oldPlateIndex] = plate;
+        this.carPlates = updatedPlaes;
         this.carPlatesUpdated.next([...this.carPlates]);
       });
   }

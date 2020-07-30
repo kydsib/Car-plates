@@ -30,7 +30,7 @@ app.use((req, res, next) => {
   // controling which HTTP words are used to send requests
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, PATCH, DELETE, OPTIONS"
+    "GET, POST, PATCH, PUT, DELETE, OPTIONS"
   );
   next();
 });
@@ -50,13 +50,40 @@ app.post("/api/plates", (req, res, next) => {
   });
 });
 
+app.put("/api/plates/:id", (req, res, next) => {
+  const newPlateData = new CarPlate({
+    _id: req.body._id,
+    name: req.body.name,
+    surname: req.body.surname,
+    plateData: req.body.plateData
+  });
+  CarPlate.updateOne({ _id: req.params.id }, newPlateData).then(result => {
+    res.status(200).json();
+  });
+});
+
 app.get("/api/plates", (req, res, next) => {
   // mongoose provided method, that returns all entries
   CarPlate.find().then(documents => {
+    const sortedAlphabetically = documents.sort(function(a, b) {
+      let nameA = a.name.toLowerCase();
+      let nameB = b.name.toLowerCase();
+      return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+    });
     // waiting while data is being fetched
     res.status(200).json({
-      carPlates: documents
+      carPlates: sortedAlphabetically
     });
+  });
+});
+
+app.get("/api/plates/:id", (req, res, next) => {
+  CarPlate.findById(req.params.id).then(plate => {
+    if (plate) {
+      res.status(200).json(plate);
+    } else {
+      res.status(404).json();
+    }
   });
 });
 
