@@ -1,7 +1,9 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 import { NgForm } from '@angular/forms';
 import { CarPlateService } from '../car-plates/car-plates.service';
+import { CarPlate } from '../car-plates/car-plates.model';
 
 @Component({
   selector: 'app-input',
@@ -9,27 +11,48 @@ import { CarPlateService } from '../car-plates/car-plates.service';
   styleUrls: ['./input.component.scss']
 })
 export class InputComponent implements OnInit {
-  // Outputing data in app component
-  // @Output() carPlateAdded = new EventEmitter<{
-  //   name: string;
-  //   surname: string;
-  //   plateData: string;
-  // }>();
+  plate: CarPlate;
+  private mode = 'create';
+  private carPlateId: string;
 
-  constructor(public platesService: CarPlateService) {}
+  constructor(
+    public platesService: CarPlateService,
+    public route: ActivatedRoute
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit() {
+    console.log(this.plate);
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      if (paramMap.has('carPlateId')) {
+        this.mode = 'edit';
+        this.carPlateId = paramMap.get('carPlateId');
+        this.plate = this.platesService.getPlate(this.carPlateId);
+      } else {
+        this.mode = 'create';
+        this.carPlateId = null;
+      }
+    });
+  }
 
-  onAddCarPlate(form: NgForm) {
+  onSaveCarPlate(form: NgForm) {
     if (form.invalid) {
       return;
     }
 
-    this.platesService.addCarPlate(
-      form.value.fname,
-      form.value.surname,
-      form.value.plate
-    );
+    if (this.mode === 'create') {
+      this.platesService.addCarPlate(
+        form.value.fname,
+        form.value.surname,
+        form.value.plate
+      );
+    } else {
+      this.platesService.updateCarPlate(
+        this.carPlateId,
+        form.value.fname,
+        form.value.surname,
+        form.value.plate
+      );
+    }
 
     form.resetForm();
   }

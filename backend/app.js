@@ -30,7 +30,7 @@ app.use((req, res, next) => {
   // controling which HTTP words are used to send requests
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, PATCH, DELETE, OPTIONS"
+    "GET, POST, PATCH, PUT, DELETE, OPTIONS"
   );
   next();
 });
@@ -47,6 +47,19 @@ app.post("/api/plates", (req, res, next) => {
     res.status(201).json({
       carPlateId: newCarPlate._id
     });
+  });
+});
+
+app.put("/api/plates/:id", (req, res, next) => {
+  const newPlateData = new CarPlate({
+    _id: req.body.id,
+    name: req.body.name,
+    surname: req.body.surname,
+    plateData: req.body.plateData
+  });
+  CarPlate.updateOne({ _id: req.params.id }, newPlateData).then(result => {
+    console.log(result);
+    res.status(200).json();
   });
 });
 

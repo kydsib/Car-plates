@@ -1,11 +1,12 @@
 <div class="row">
     <div class="col-xs-12">
         <!--  acces to angular form obj -- #carPlateForm="ngForm" -->
-        <form #carplateform="ngForm" (submit)="onAddCarPlate(carplateform)" class="needs-validation" novalidate>
+        <form #carplateform="ngForm" (submit)="onSaveCarPlate(carplateform)" class="needs-validation" novalidate>
             <div class="form-row">
                 <div class="col-md-4 mb-3">
                     <label for="validationCustom01">Name</label>
-                    <input #fname="ngModel" [class.is-invalid]="fname.invalid && fname.touched" [class.is-valid]="fname.valid" class="form-control" id="validationCustom01" name="fname" ngModel placeholder="Enter Name" required type="text"/>
+                    <!-- <input #fname="ngModel" [class.is-invalid]="fname.invalid && fname.touched" [class.is-valid]="fname.valid" [ngModel]="plate?.name" class="form-control" id="validationCustom01" name="name" placeholder="Enter Name" required type="text"/> -->
+                    <input #fname="ngModel" [class.is-invalid]="fname.invalid && fname.touched" [class.is-valid]="fname.valid" class="form-control" id="validationCustom01" name="name" ngModel placeholder="Enter Name" required type="text"/>
                     <div class="valid-feedback">
                         Looks good!
                     </div>

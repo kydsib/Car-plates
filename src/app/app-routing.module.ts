@@ -5,7 +5,8 @@ import { CarPlatesListComponent } from './car-plates/car-plates-list/car-plates-
 
 const routes: Routes = [
   { path: '', component: InputComponent },
-  { path: 'list', component: CarPlatesListComponent }
+  { path: 'list', component: CarPlatesListComponent },
+  { path: 'edit/:carPlateId', component: InputComponent }
 ];
 
 @NgModule({
