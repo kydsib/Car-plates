@@ -12,6 +12,7 @@ import { CarPlate } from '../car-plates/car-plates.model';
 })
 export class InputComponent implements OnInit {
   carPlate: CarPlate;
+  isLoading = false;
   private mode = 'create';
   private plateId: string;
 
@@ -25,8 +26,10 @@ export class InputComponent implements OnInit {
       if (paramMap.has('carPlateId')) {
         this.mode = 'edit';
         this.plateId = paramMap.get('carPlateId');
+        this.isLoading = true;
 
         this.platesService.getPlate(this.plateId).subscribe(carPlateData => {
+          this.isLoading = false;
           this.carPlate = {
             _id: carPlateData._id,
             name: carPlateData.name,

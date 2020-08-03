@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs'; // it's like event emitter but for broader usage
 
 import { CarPlate } from './car-plates.model';
@@ -8,25 +9,34 @@ import { CarPlate } from './car-plates.model';
 export class CarPlateService {
   private carPlates: CarPlate[] = [];
   // passing CarPlate as a payload
-  private carPlatesUpdated = new Subject<CarPlate[]>();
+  private carPlatesUpdated = new Subject<{
+    carPlates: CarPlate[];
+    plateCount: number;
+  }>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   // getting carPlate data from back-end
-  getCarPlates() {
+  getCarPlates(platesPerPage: number, currentPage: number) {
+    const queryParams = `?pagesize=${platesPerPage}&page=${currentPage}`;
     this.http
-      .get<{ message: string; carPlates: CarPlate[] }>(
-        'http://localhost:3000/api/plates'
+      .get<{ carPlates: CarPlate[]; totalPlateCount: number }>(
+        'http://localhost:3000/api/plates' + queryParams
       )
       // no need to unsubscribe, Angular handles this
       //subscribe is used for request to be actualy sent
       .subscribe(carPlateData => {
         this.carPlates = carPlateData.carPlates;
-        this.carPlatesUpdated.next([...this.carPlates]);
+        this.carPlatesUpdated.next({
+          carPlates: [...this.carPlates],
+          // might break here
+          plateCount: carPlateData.totalPlateCount
+        });
       });
   }
 
   getCarPlateUpdate() {
+    console.log(this.carPlatesUpdated.asObservable());
     return this.carPlatesUpdated.asObservable();
   }
 
@@ -52,12 +62,7 @@ export class CarPlateService {
         carPlate
       )
       .subscribe(responseData => {
-        console.log(carPlate);
-        const id = responseData.carPlateId;
-        carPlate._id = id;
-        this.carPlates.push(carPlate);
-        // Using Subject to emit data
-        this.carPlatesUpdated.next([...this.carPlates]);
+        this.router.navigate(['/']);
       });
   }
 
@@ -71,25 +76,11 @@ export class CarPlateService {
     this.http
       .put('http://localhost:3000/api/plates/' + _id, plate)
       .subscribe(response => {
-        const updatedPlaes = [...this.carPlates];
-        const oldPlateIndex = updatedPlaes.findIndex(e => e._id === plate._id);
-        updatedPlaes[oldPlateIndex] = plate;
-        this.carPlates = updatedPlaes;
-        this.carPlatesUpdated.next([...this.carPlates]);
+        this.router.navigate(['/']);
       });
   }
 
   deletePlate(carPlateId: string) {
-    this.http
-      .delete('http://localhost:3000/api/plates/' + carPlateId)
-      .subscribe(() => {
-        // updating car plates by removing deleted by id
-        const updatedCarPlates = this.carPlates.filter(
-          plate => plate._id !== carPlateId
-        );
-
-        this.carPlates = updatedCarPlates;
-        this.carPlatesUpdated.next([...this.carPlates]);
-      });
+    return this.http.delete('http://localhost:3000/api/plates/' + carPlateId);
   }
 }

@@ -1,7 +1,13 @@
+<div *ngIf="isLoading" class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
 <div class="row">
+
     <div class="col-xs-12">
         <!--  acces to angular form obj -- #carPlateForm="ngForm" -->
-        <form #carplateform="ngForm" (submit)="onSaveCarPlate(carplateform)" class="needs-validation" novalidate>
+        <form #carplateform="ngForm" (submit)="onSaveCarPlate(carplateform)" *ngIf="!isLoading" class="needs-validation" novalidate>
             <div class="form-row">
                 <div class="col-md-4 mb-3">
                     <label for="validationCustom01">Name</label>
