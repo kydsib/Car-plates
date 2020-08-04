@@ -4,7 +4,6 @@
     </div>
 </div>
 <div class="row">
-
     <div class="col-xs-12">
         <!--  acces to angular form obj -- #carPlateForm="ngForm" -->
         <form #carplateform="ngForm" (submit)="onSaveCarPlate(carplateform)" *ngIf="!isLoading" class="needs-validation" novalidate>
@@ -18,17 +17,22 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="surname">Surname</label>
-                    <input #surname="ngModel" [class.is-invalid]="surname.invalid && surname.touched" [class.is-valid]="surname.valid" [ngModel]="carPlate?.surname" class="form-control" id="surname" name="surname" placeholder="Enter Surname" required type="text"/>
+                    <input #surname="ngModel" [class.is-invalid]="surname.invalid && surname.touched && plateIsTaken
+                                                                                    " [class.is-valid]="surname.valid" [ngModel]="carPlate?.surname" class="form-control" id="surname" name="surname" placeholder="Enter Surname" required type="text"/>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="plate">Plate Number</label>
-                    <input #carplate="ngModel" [class.is-invalid]="carplate.invalid && carplate.touched" [class.is-valid]="carplate.valid" [ngModel]="carPlate?.plateData" class="form-control" id="plate" name="plate" placeholder="Car Plate" required type="text"/>
+                    <input #carplate="ngModel" [class.is-invalid]="carplate.invalid && carplate.touched" [class.is-valid]="carplate.valid" [ngModel]="carPlate?.plateData" class="form-control" id="plate" name="plate" pattern="[a-zA-Z]{3}[0-9]{3}|[0-9]{3}[A-Z]{2}" placeholder="Car Plate" required type="text"/>
                     <div class="invalid-feedback">
-                        Please enter valid plate number.
+                        Use AAA111 or 111AA format.
                     </div>
+                    <div *ngIf="plateIsTaken" class="plate-taken">
+                        This plate number is already taken.
+                    </div>
+
                 </div>
             </div>
             <div class="row">

@@ -12,7 +12,12 @@ import { CarPlate } from '../car-plates/car-plates.model';
 })
 export class InputComponent implements OnInit {
   carPlate: CarPlate;
+  // carPlates: CarPlate[];
   isLoading = false;
+
+  plateIsTaken = false;
+  carPlateLength;
+  data;
   private mode = 'create';
   private plateId: string;
 
@@ -22,6 +27,10 @@ export class InputComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.platesService
+      .checkIfPlateTaken()
+      .subscribe(dataFromDb => (this.data = dataFromDb));
+
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('carPlateId')) {
         this.mode = 'edit';
@@ -49,12 +58,22 @@ export class InputComponent implements OnInit {
       return;
     }
 
-    if (this.mode === 'create') {
+    let isPlateTaken = this.data.carPlates.find(
+      item => item.plateData === form.value.plate
+    );
+
+    if (this.mode === 'create' && isPlateTaken === undefined) {
       this.platesService.addCarPlate(
         form.value.fname,
         form.value.surname,
         form.value.plate
       );
+
+      this.plateIsTaken = false;
+      form.reset();
+    } else if (this.mode === 'create' && isPlateTaken !== undefined) {
+      this.plateIsTaken = true;
+      return;
     } else {
       this.platesService.updateCarPlate(
         this.plateId,

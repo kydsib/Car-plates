@@ -27,12 +27,17 @@ export class CarPlateService {
       //subscribe is used for request to be actualy sent
       .subscribe(carPlateData => {
         this.carPlates = carPlateData.carPlates;
+        console.log(this.carPlates);
         this.carPlatesUpdated.next({
           carPlates: [...this.carPlates],
           // might break here
           plateCount: carPlateData.totalPlateCount
         });
       });
+  }
+
+  checkIfPlateTaken() {
+    return this.http.get('http://localhost:3000/api/plates');
   }
 
   getCarPlateUpdate() {

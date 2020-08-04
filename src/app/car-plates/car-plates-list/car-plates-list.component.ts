@@ -13,7 +13,7 @@ import { CarPlateService } from '../car-plates.service';
 export class CarPlatesListComponent implements OnInit, OnDestroy {
   isLoading = false;
   totalPlates = 0;
-  platesPerPage = 1;
+  platesPerPage = 3;
   currentPage = 1;
   platesPerPageOptions = [3, 5, 15, 25];
   carPlates: CarPlate[] = [];

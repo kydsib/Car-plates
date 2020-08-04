@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Subscription } from 'rxjs';
 
 import { CarPlate } from '../../car-plates.model';
 import { CarPlateService } from '../../car-plates.service';
